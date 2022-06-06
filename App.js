@@ -6,55 +6,41 @@
  * @flow strict-local
  */
 import 'react-native-gesture-handler';
-import React from 'react';
-import type { Node } from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   useColorScheme,
-  View,
 } from 'react-native';
-
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import StackNavigation from './src/navigation/StackNavigation';
 import ContextProvider from './src/helpers/AppContext';
+import { openDb } from './src/commons/dbConnection';
+import SQLite from 'react-native-sqlite-storage'
 
-const Section = ({ children, title }): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+const db = openDb;
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  // SQLite.enablePromise(true);
+  const createTable = () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS "
+        + "Favourites"
+        + "(ID INTEGER PRIMARY KEY, API TEXT);"
+      )
+    })
+  }
 
+  useEffect(() => {
+    createTable();
+  }, [])
   return (
     <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />

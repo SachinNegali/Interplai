@@ -3,16 +3,16 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { colors } from '../constants/colors';
 
-const ItemCard = ({ data, addTofavourite, dashboard }) => {
-
+const ItemCard = ({ data, addOrRemovefavourite, favourites }) => {
+    const isFavourite = favourites ? favourites.filter(fav => fav.ID === data.index).length > 0 : true
     return (
         <View style={styles.card}>
             <Text style={styles.title}>{data.item.API}</Text>
             <Icon
-                name={data.item.isFavourite ? 'heart' : 'heart-o'}
+                name={isFavourite ? 'heart' : 'heart-o'}
                 size={20}
                 color={colors.primary}
-                onPress={() => dashboard && addTofavourite(data.index)}
+                onPress={() => addOrRemovefavourite(data.index)}
             />
         </View>
     )
