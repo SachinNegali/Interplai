@@ -30,6 +30,7 @@ const SplashScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ActivityIndicator color={colors.primary} size={50} />
+            <Text style={styles.text}>Fetching Data...</Text>
         </View>
     )
 }
@@ -41,5 +42,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         justifyContent: 'center'
+    },
+    text: {
+        alignSelf: 'center',
+        marginTop: 50
     }
 })

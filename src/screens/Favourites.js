@@ -1,16 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { View, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { View, FlatList, RefreshControl } from 'react-native';
 import ItemCard from '../components/ItemCard';
-import { appContext } from '../helpers/AppContext';
 import { openDb } from '../commons/dbConnection';
+import { colors } from '../constants/colors';
 
 const db = openDb;
 
 const Favourites = ({ navigation }) => {
     const [favourites, setFavourites] = useState([]);
-    const context = useContext(appContext);
+    const [refreshing, setRefreshing] = useState(false);
 
     const getFavourites = () => {
+        setRefreshing(true);
         db.transaction(tx => {
             tx.executeSql(
                 "SELECT * FROM Favourites",
@@ -21,6 +22,7 @@ const Favourites = ({ navigation }) => {
                         favsArray.push(results.rows.item(i));
                     }
                     setFavourites(favsArray);
+                    setRefreshing(false)
                 }
             )
         })
@@ -30,8 +32,6 @@ const Favourites = ({ navigation }) => {
         getFavourites();
     }, []);
 
-    console.log('FAVOURITESS inside favsss', favourites);
-
     return (
         <View>
             <FlatList
@@ -40,9 +40,13 @@ const Favourites = ({ navigation }) => {
                 renderItem={data => <ItemCard data={data} />}
                 extraData={favourites}
                 keyExtractor={(_, index) => index}
+                refreshControl={<RefreshControl
+                    colors={[colors.primary]}
+                    refreshing={refreshing}
+                    onRefresh={() => getFavourites()} />}
             />
         </View>
     )
 }
 
-export default Favourites
+export default Favourites;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import Dashboard from '../screens/Dashboard';
 import Favourites from '../screens/Favourites';
 import { colors } from '../constants/colors';
@@ -13,13 +12,12 @@ const TabNavigation = () => {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-            }}
-            tabBarOptions={{
-                activeTintColor: colors.primary,
+                tabBarActiveTintColor: colors.primary,
                 labelStyle: {
                     fontSize: 13,
                 },
-            }}>
+            }}
+        >
             <Tab.Screen
                 options={{
                     tabBarIcon: ({ focused }) => <Icon name="home" color={focused ? colors.primary : colors.disabled} size={25} />

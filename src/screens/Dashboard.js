@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, FlatList, BackHandler, Alert } from 'react-native';
 import ItemCard from '../components/ItemCard';
-import { appContext } from '../helpers/AppContext';
 import { useFocusEffect } from '@react-navigation/native';
 import { openDb } from '../commons/dbConnection';
 const db = openDb;
@@ -9,7 +8,6 @@ const db = openDb;
 const Dashboard = ({ route }) => {
     const [entries, setEntries] = useState([]);
     const [favourites, setFavourites] = useState([]);
-    const context = useContext(appContext);
 
     const getFavourites = () => {
         db.transaction(tx => {
@@ -18,7 +16,6 @@ const Dashboard = ({ route }) => {
                 [],
                 (tx, results) => {
                     let favsArray = [];
-                    console.log(results.rows.length);
                     for (let i = 0; i < results.rows.length; i++) {
                         favsArray.push(results.rows.item(i));
                     }
@@ -56,19 +53,12 @@ const Dashboard = ({ route }) => {
     }
 
     const hadleAddToFavourites = async (index) => {
-        // setEntries((prevState) => {
-        //     prevState[index].isFavourite = true;
-        //     return [...prevState]
-        // })
-        // context.saveToFavourites(entries[index]);
-        console.log(entries[index].API);
         db.transaction(tx => {
             tx.executeSql(
                 `SELECT * FROM Favourites WHERE ID=${index}`,
                 [],
                 (tx, results) => {
                     if (results.rows.length > 0) {
-                        // removeFavourite(index);
                         Alert.alert(
                             `Remove ${entries[index].API}`,
                             `Sure want to remove ${entries[index].API} from favourites?`, [{
@@ -83,15 +73,7 @@ const Dashboard = ({ route }) => {
                 }
             )
         })
-        // await db.transaction(async (tx) => {
-        //     await tx.executeSql(
-        //         "INSERT INTO Favourites (ID, API) VALUES (?, ?)",
-        //         [index, entries[index].API]
-        //     )
-        // })
     }
-
-    console.log('FAVOURITESSS', favourites);
 
     useFocusEffect(
         useCallback(() => {
