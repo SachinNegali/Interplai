@@ -12,7 +12,7 @@ const ItemCard = ({ data, addOrRemovefavourite, favourites }) => {
                 name={isFavourite ? 'heart' : 'heart-o'}
                 size={20}
                 color={colors.primary}
-                onPress={() => addOrRemovefavourite(data.index)}
+                onPress={() => favourites && addOrRemovefavourite(data.index)}
             />
         </View>
     )

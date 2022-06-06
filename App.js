@@ -41,9 +41,7 @@ const App = () => {
   return (
     <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      {/* <ContextProvider> */}
       <StackNavigation />
-      {/* </ContextProvider> */}
     </SafeAreaView>
   );
 };
